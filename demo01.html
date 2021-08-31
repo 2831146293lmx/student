@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<!-- 引入vue -->
+		<script src="https://cn.vuejs.org/js/vue.js"></script>
+		<!-- 引入样式 -->
+		<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+		<!-- 引入组件库 -->
+		<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+		<!-- 引入axios -->
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+	<style type="text/css">
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		.out{
+			width: 590px;
+			height: 470px;
+			border: 1px solid black;
+			margin: 100px auto;
+			position: relative;
+		}
+		.btnLeft{
+			width: 50px;
+			height: 50px;
+			color: #ccc;
+			background-color: #F9FAFC;
+			position: absolute;
+			top: calc(50% - 30px);
+			left: opx;
+			font-size: 30px;
+			border-radius: 100%;
+			border: none;
+		}
+		.btnright{
+			width: 50px;
+			height: 50px;
+			color: #ccc;
+			background-color: #F9FAFC;
+			position: absolute;
+			top: calc(50% - 30px);
+			right: 0px;
+			font-size: 30px;
+			border-radius: 100%;
+			border: none;
+		}
+		#demo09{
+			width: 550px;
+			min-height: 200px;
+			margin: 100px auto;
+			border: 1px solid #eee;
+			border-radius: 5px;
+		}
+		.val{
+			display: flex;
+			padding: 15px;
+		}
+		.ipt{
+			height: 36px;
+			width: 450px;
+			border: none;
+			background-color: #eee;
+			border-radius: 3px;
+			padding: 0px 10px;
+			font-size: 16px;
+		}
+		.but{
+			height: 36px;
+			width: 20%;
+			border: none;
+			background-color: #4fc080;
+			color: #fff;
+			font-size: 16px;
+		}
+		.row{
+			border-bottom: 1px solid #eee;
+			border-top: 1px solid #eee;
+			height: 48px;
+			display: flex;
+			align-content: 48px;
+		}
+		.close{
+		font-size: 22px;
+		font-family: "宋体";
+		color: #ff976a;
+		display: none;
+		cursor: pointer;
+		}
+		close:hover{display: block;}
+		.num{
+			padding-top: 100px;
+			color: #555;
+			text-align: center;
+		}
+			
+		.num b{
+			display: inline-block;
+			padding: 0px 3px;
+		}
+		.coment{
+			font-size: 16px;
+			color: #999;
+			text-align: center;
+		}
+	</style>
+	</head>
+	<body>
+		<!-- 选择框 v-model-->
+		<div id="demo01">
+			<el-select v-model="value6" placeholder="请选择">
+			    <el-option v-for="item in Array" :key="item.value" :label="item.label" :value="item.value">
+			       <span style="float: left">{{ item.label }}</span>
+			       <span style="float: right; color: #8492a6; font-size: 13px">{{ item.value }}</span>
+			    </el-option>
+			</el-select>
+		</div>
+		<hr >
+		<!-- 时间定时器 setInterval-->
+		<div id="demo02">
+			<h1>{{num}}</h1>
+		</div>
+		<hr >
+		<!-- 数量加减 @click v-if-->
+		<div id="demo03">
+			<button type="button" @click="sub">-</button>
+			<b>{{num}}</b>
+			<button type="button" @click="add">+</button>
+		</div>
+		<hr >
+		<!-- 阻止跳转 @click.once-->
+		<div id="demo04">
+			<button type="button" @click.once="btnclick">按钮</button>
+			<a href="index.html">跳转</a>
+		</div>
+		<hr >
+		<!-- 回车打印输入框内容  @keyup.enter-->
+		<div id="demo05">
+			<input type="text" @keyup.enter="enter" v-model="src"/>
+		</div>
+		<hr >
+		<!-- 鼠标移入出现提示文本  v-bind-->
+		<div id="demo06">
+			<h3 title = "欢迎学习vue.js" :title="tit">优课学院</h3>
+			<!-- <h3 title = "tit">优课学院</h3> -->
+			<img v-for="item in qin" :src="item" >   <!-- 不写v-bind 图片渲染不出来-->
+		</div>
+		<hr >
+		<!-- 图片轮播  切换 -->
+		<div id="demo07">
+			<div class="out" >
+				<button class="btnLeft" type="button" @click="clackLeft">&lt;</button>
+				<img class="qin"  :src="qinArr[num1]" >
+				<button class="btnright" type="button"@click="clackRight">&gt;</button>
+			</div>
+		</div>
+		<hr > 
+		<!-- 多选框  单选框  下拉框-->
+		<div id="demo08">
+			爱好：<br>
+			<label><input type="checkbox" v-model="checkbox" value="看书"/>看书</label>
+			<label><input type="checkbox" v-model="checkbox" value="玩游戏"/>玩游戏</label>
+			<label><input type="checkbox" v-model="checkbox" value="听音乐"/>听音乐</label>
+			<label><input type="checkbox" v-model="checkbox" value="打篮球"/>打篮球</label>
+			<label><input type="checkbox" v-model="checkbox" value="看电视"/>看电视</label>
+			<h1>{{checkbox}}</h1>
+			
+			<hr >
+			性别：<br>
+			<label><input @click="click" type="radio"  v-model="radio" value="男"/>男</label>
+			<label><input @click="click" type="radio" v-model="radio" value="女"/>女</label>
+			<label><input @click="click" type="radio" v-model="radio" value="保密"/>保密</label>
+			<h1>{{radio}}</h1>
+			
+			<hr >
+			学历:<br>
+			<select v-model="select">
+				<option value ="">请选择</option>
+				<option value ="中专">中专</option>
+				<option value ="大专">大专</option>
+				<option value ="本科">本科</option>
+				<option value ="博士">博士</option>
+			</select>
+			<h1>{{select}}</h1>
+		</div>
+		<hr >
+		<!-- 评论案例 -->
+		<div id="demo09">
+			<div class="val">
+				<input class="ipt" type="text" v-model="inpVal" @keyup.enter="onEnter"/>
+				<input class="but" type="button"  value="评论" @click="butClick"/>
+			</div>
+				
+			<div class="row" v-for="(item,idx) in listArr">
+				{{item}}
+				<div class="close" @click="onClo(idx)">x</div>
+			</div>	
+			
+			<div class="num" v-if="listSize">共<b>{{listSize()}}</b>条评论</div>
+			<div class="coment" v-else>暂无评论</div>
+		</div>
+		<hr >
+		
+		<!-- 计算属性 computed -->
+		<div id="demo10">
+			<!-- 在methods调用num次  执行num次 -->
+			<!-- <h1> {{listSize()}}</h1>
+			<i>{{listSize()}}</i> -->
+			
+			<!--在computed调用num次 都只执行一次 -->
+			<h1>{{listLength}}</h1>
+			<a href="#">{{listLength}}</a>
+		</div>
+		<hr >
+		
+		<div id="demo11">
+			<p v-for="item in arrs">{{getLen(item,20)}}</p>
+		</div>
+		<hr >
+		<!-- 监听器 -->
+		<div id="demo12">
+			<input type="text" v-model="inpVue" />
+			<h1>{{inpVue}}</h1>
+		</div>
+		<hr >
+		<!-- 过滤器 -->
+		<div id="demo13">
+			<!-- <p v-bind:id="item | getSerLen(15,'⚫')"></p>  绑定元素 -->
+			<p v-for="item in arrs">{{item | getSerLen(15,"⚫")}}</p>
+		</div>
+		
+		<!-- 生命周期函数 -->
+		<div id="demo14">
+			<h1 class="box">{{title}}</h1>
+		</div>
+		<hr >
+		<!-- 组件 -->
+		<div id="demo15">
+			<itembox></itembox>
+			<template id="myTem">
+				<div >
+					<div class="bot" v-for="item in arrs">
+						<img :src="item.pic" >
+						<h2>{{item.tital}}</h2>
+						<p>{{item.des}}</p>
+						<i>{{item.money}}</i>
+					</div>	
+				</div>
+			</template>
+			<!-- <div class="bot">
+				<img src="images/jd.jpg" >
+				<h2>标题</h2>
+				<p>描述信息</p>
+				<i>￥</i>
+			</div> -->
+		</div>
+		<hr >
+		<!-- 全局组件 -->
+		<div id="demp16">
+			
+		</div>
+		
+		<script>
+		// 修改组件内容
+			Vue.component("itembox",{
+				data(){
+					return{
+						arrs:[
+							{
+								tital:"标题1",des:"描述1",pic:"images/jd.jpg",money:"188.88"
+							},
+							{
+								tital:"标题2",des:"描述2",pic:"images/jd.jpg",money:"198.88"
+							},
+							{
+								tital:"标题3",des:"描述3",pic:"images/jd.jpg",money:"168.88"
+							},
+							{
+								tital:"标题4",des:"描述4",pic:"images/jd.jpg",money:"118.88"
+							}
+						]
+					}
+				},
+				template:"#myTem"
+				// template:`<div class="bot">
+				// 	<img src="images/jd.jpg" >
+				// 	<h2>标题</h2>
+				// 	<p>描述信息</p>
+				// 	<i>￥</i>
+				// </div>`
+				
+			})
+		
+			var demo01 = new Vue({
+				el:"#demo01",
+				data:{
+					Array: [
+						{
+					      value: 'Beijing',
+					      label: '北京'
+					    }, 
+						{
+					      value: 'Shanghai',
+					      label: '上海'
+					    },
+						{
+					      value: 'Nanjing',
+					      label: '南京'
+					    },
+						{
+					      value: 'Chengdu',
+					      label: '成都'
+					    },
+						{
+					      value: 'Shenzhen',
+					      label: '深圳'
+					    }, 
+						{
+					      value: 'Guangzhou',
+					      label: '广州'
+					    }],
+					    value6: ''        
+				}
+			})
+			var demo02 = new Vue({
+				el:"#demo02",
+				data:{
+					num:0
+				},
+				
+				methods:{
+					//放置方法的
+					setInt:function(){
+						setInterval(()=>{
+							this.num++
+						},500)
+					}
+				},
+				created() {		//生命周期
+					this.setInt()    // 调用方法
+					// setInterval(() =>{		//定时器
+					// 	this.num++;
+						
+					// },500)
+				}
+			})
+			var demo03 = new Vue({
+				el:"#demo03",
+				data:{
+					num:1
+				},
+				methods:{
+					add(){
+						this.num++
+					},
+					sub(){
+						if(this.num == 1){
+							// this.num=1;
+							console.log("最后一页")
+						}else{
+							this.num--
+						}
+						
+					}
+				}
+			})
+			var demo04 = new Vue({
+				el:"#demo04",
+				methods:{
+					btnclick(){
+						alert("只能点击一次")
+					}
+				}
+			})
+			var demo05 = new Vue({
+				el:"#demo05",
+				data:{
+					src:""
+				},
+				methods:{
+					enter(){
+						console.log(this.src)
+					}
+					}
+			})
+			var demo06 = new Vue({
+				el:"#demo06",
+				data:{
+					tit:"欢迎学习微信小程序",
+					qin:["images/qin1.jpg","images/qin2.jpg"]
+				}
+			})
+			var demo07 = new Vue({
+				el:"#demo07",
+				data:{
+					num1 :0,
+					qinArr:["images/qin1.jpg","images/qin2.jpg","images/qin3.jpg","images/qin4.jpg","images/qin5.jpg"]
+				},
+				methods:{
+					fun:function(){
+					//setInterval(函数体,时间)
+					setInterval(this.clackRight,1000)
+					},
+					// 左键
+					clackLeft:function(){
+						this.num1--
+					},
+					// 右键
+					clackRight:function(){
+					    this.num1++;
+					    if(this.num1 == this.qinArr.length){
+					    this.num1 = 0
+					          }
+					        }
+					},
+				mounted(){    //生命周期  调用函数
+				    this.fun()
+				}
+			})
+			var demo08 = new Vue({
+				el:"#demo08",
+				data:{
+					checkbox:["听音乐"],
+					radio:[],
+					select:""
+				},
+				methods:{
+					click(){
+						if(this.value == '女'){
+							console.log("女")
+						}
+					}
+				}
+			})
+			var demo09 = new Vue({
+				el:"#demo09",
+				data:{
+					inpVal:"",
+					listArr:[]
+				},
+				methods:{
+					// onIpt(e){
+					// 	console.log(this.inpVal)
+					// 	// console.log(e.target.value)
+					// },
+					onEnter(){
+						this.listArr.push(this.inpVal)
+						this.inpVal=""
+					},
+					onClo(index){
+						this.listArr.splice(index,1)
+					},
+					butClick(){
+						this.listArr.push(this.inpVal)
+					},
+					
+				},
+				computed:{
+					listLength(){
+						return this.listArr.length
+					}
+				}
+			})
+			var demo10 = new Vue({
+				el:"#demo10",
+				data:{
+				listArr:[1,22,333]
+				},
+			// 处理复杂合集
+				methods:{
+				// listSize(){
+				// 	console.log("我被执行了")
+				// 	return this.listArr.length
+				// }
+				},
+			// 计算属性
+				computed:{
+				listLength(){
+					console.log("我是计算属性")
+					return this.listArr.length
+				}
+				}
+			})
+		    var demo11 = new Vue({
+				el:"#demo11",
+				data:{
+					arrs:[
+						'31个省区市新增确诊病例76例 其中本土病例40例',
+						'教育股暴跌！新东方、好未来…这些公司紧急声明',
+						'连续发生局部疫情 媒体：加快疫苗接种仍是防疫关键',
+						'云南新增境外输入确诊病例18例、无症状感染者1例',
+					]
+				},
+				methods:{
+					getSubLen(str,len){
+						if(str.lentgth>len){
+							return str.substr(0,len)+"..."
+						}else{
+							return str;
+						}
+					}
+				},
+				computed:{
+					getLen(){
+						return function(str,len){
+							if(str.length>len){
+								return str.substr(0,len)+"..."
+							}
+							return str;
+						}
+					}
+				}
+			})
+			var demo12 = new Vue({
+				el:"#demo12",
+				data:{
+					inpVue:""
+				},
+				methods:{
+					
+				},
+				computed:{
+					
+				},
+				// 监听器
+				watch:{
+					inpVue(val){
+					console.log(val)	
+					}
+				}
+			})
+			var demo13 = new Vue({
+				el:"#demo13",
+				data:{
+					arrs:[
+						'31个省区市新增确诊病例76例 其中本土病例40例',
+						'教育股暴跌！新东方、好未来…这些公司紧急声明',
+						'连续发生局部疫情 媒体：加快疫苗接种仍是防疫关键',
+						'云南新增境外输入确诊病例18例、无症状感染者1例',
+					]
+				},
+				methods:{},
+				computed:{},
+				watch:{},
+				filters:{
+					getSerLen(str,len,y){
+						if(str.length>len){
+							return y+str.substr(0,len)+"..."
+						}
+						return y+str;
+					},
+					
+				}
+			})
+			var demo14 = new Vue({
+				el:"#demo14",
+				data:{
+					title:"vue开发"
+				},
+				created() {
+				//获取网络请求	
+				},
+				mounted() {
+					// 修改值
+				},
+				beforeCreate() {
+					
+				}
+			})
+			var demo15 = new Vue({
+				el:"#demo15"
+			})
+		</script>
+	</body>
+</html>
